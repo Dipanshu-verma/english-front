@@ -1,131 +1,97 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { addPostAction, getPost } from "../redux/actions"; 
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBooks } from '../redux/actions';
 
 const CreatePost = () => {
-  const [postTitle, setPostTitle] = useState("");
-  const [postBody, setPostBody] = useState("");
-  const [latitude, setLatitude] = useState("");  
-  const [longitude, setLongitude] = useState("");  
-  const dispatch = useDispatch();
-  const [isActive, setIsActive] = useState(true);
-  const { userId, token } = useSelector((state) => state);
+  const [postDetails, setPostDetails] = useState({
+    title: '',
+    author: '',
+    language: '',
+    rating: 0,
+  });
 
-  const handleCreatePost = async (e) => {
+ const dispatch =  useDispatch();
+ const {token}  = useSelector(store=> store);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+     
+    if (name === 'rating') {
+      setPostDetails((prevDetails) => ({ ...prevDetails, [name]: parseInt(value, 10) }));
+    } else {
+      setPostDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+    }
+  };
+  const languageOptions = ['English', 'Hindi','Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese'];
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      addPostAction(
-        {
-          title: postTitle,
-          body: postBody,
-          active: isActive,
-            latitude,
-            longitude,
-          
-        },
-        token
-      )
-    );
+  dispatch(addBooks(postDetails,token))
+    console.log('Submitted data:', postDetails);
   };
 
-
- 
   return (
-    <div className="container mx-auto mt-8">
-      <h1 className="text-4xl font-bold mb-4">Create Post</h1>
-
-      <form
-        onSubmit={handleCreatePost}
-        className="max-w-md mx-auto bg-white p-8 rounded-md shadow-md"
-      >
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+      <h2 className="text-2xl font-semibold mb-4">Create Post</h2>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label
-            htmlFor="postTitle"
-            className="block text-gray-600 font-semibold mb-2"
-          >
-            Title
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Title:</label>
           <input
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             type="text"
-            id="postTitle"
-            name="postTitle"
-            value={postTitle}
-            onChange={(e) => setPostTitle(e.target.value)}
-            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+            name="title"
+            value={postDetails.title}
+            onChange={handleInputChange}
             required
           />
         </div>
-
         <div className="mb-4">
-          <label
-            htmlFor="postBody"
-            className="block text-gray-600 font-semibold mb-2"
-          >
-            Body
-          </label>
-          <textarea
-            id="postBody"
-            name="postBody"
-            value={postBody}
-            onChange={(e) => setPostBody(e.target.value)}
-            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-            rows="4"
-            required
-          ></textarea>
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="latitude"
-            className="block text-gray-600 font-semibold mb-2"
-          >
-            Latitude
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Author:</label>
           <input
-            type="number"
-            id="latitude"
-            name="latitude"
-            value={latitude}
-            onChange={(e) => setLatitude(parseFloat(e.target.value))}
-            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            type="text"
+            name="author"
+            value={postDetails.author}
+            onChange={handleInputChange}
             required
           />
         </div>
-
         <div className="mb-4">
-          <label
-            htmlFor="longitude"
-            className="block text-gray-600 font-semibold mb-2"
+          <label className="block text-gray-700 text-sm font-bold mb-2">Language:</label>
+          <select
+          name="language"
+          onChange={handleInputChange}
+          value={postDetails.language}
+          className="border p-2 rounded-md w-full"
+        >
+           
+          {languageOptions.map((language, index) => (
+            <option key={index} value={language}>
+              {language}
+            </option>
+          ))}
+        </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">Rating:</label>
+          <select
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            name="rating"
+            value={postDetails.rating}
+            onChange={handleInputChange}
+            required
           >
-            Longitude
-          </label>
-          <input
-            type="number"
-            id="longitude"
-            name="longitude"
-            value={longitude}
-            onChange={(e) => setLongitude(parseFloat(e.target.value))}
-            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="isActive" className="block text-gray-600 font-semibold mb-2">Active</label>
-          <input
-            type="checkbox"
-            id="isActive"
-            name="isActive"
-            checked={isActive}
-            onChange={() => setIsActive(!isActive)}
-            className="border rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
-          />
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
         </div>
         <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue"
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
         >
-          Create Post
+          Submit
         </button>
       </form>
     </div>

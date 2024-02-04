@@ -1,126 +1,146 @@
+import axios from "axios";
 
-import axios from 'axios';
-
- 
 const registerAction = (userData) => async (dispatch) => {
-    console.log(userData);
-    try {
-     
-      const response = await axios.post('https://node-compy.onrender.com/registration', userData);
-    
-      dispatch({
-        type: 'REGISTER',
-        payload: { user: response.data.user, token: response.data.token },
-      });
+  try {
+    const response = await axios.post(
+      "https://node-compy.onrender.com/signup",
+      userData
+    );
+  } catch (error) {
+    console.error("Error registering user:", error);
+  }
+};
 
-    } catch (error) {
-      console.error('Error registering user:', error);
-   
-    }
-  };
-  
- 
-  const loginAction = (credentials) => async (dispatch) => {
-    console.log(credentials);
-    try {
-  
-      const response = await axios.post('https://node-compy.onrender.com/login', credentials);
-  
-       localStorage.setItem("token", response.data.token);
-       localStorage.setItem("userId", response.data.user._id);
-      dispatch({
-        type: 'LOGIN',
-        payload: { userId: response.data.user._id, token:  response.data.token},
-      });
-    } catch (error) {
-      console.error('Error logging in:', error);
-     
-    }
-  };
- 
+const loginAction = (credentials) => async (dispatch) => {
+  try {
+    const response = await axios.post(
+      "https://node-compy.onrender.com/login",
+      credentials
+    );
+
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("userId", response.data.user._id);
+    localStorage.setItem("role", response.data.user.role);
+
+    dispatch({
+      type: "LOGIN",
+      payload: {
+        userId: response.data.user._id,
+        token: response.data.token,
+        role: response.data.user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Error logging in:", error);
+  }
+};
+
 const logoutAction = () => (dispatch) => {
-   
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    dispatch({
-      type: 'LOGOUT',
-    });
-  };
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("role");
   
-  export default logoutAction;
-  
- 
-const addPostAction = (post,token) => async (dispatch) => {
-    console.log(post);
+  dispatch({
+    type: "LOGOUT",
+  });
+};
+
+export default logoutAction;
+
+const addBooks = (post, token) => async (dispatch) => {
   try {
-  
-    const response = await axios.post('https://node-compy.onrender.com/posts', post,{
+    const response = await axios.post(
+      "https://node-compy.onrender.com/books",
+      post,
+      {
         headers: {
-          Authorization: `${token}`, 
+          Authorization: `${token}`,
         },
-      });
- 
-    
-    dispatch({
-      type: 'ADD_POST',
-      payload: { post: response.data },  
-    });
-  } catch (error) {
-    console.error('Error adding post:', error);
-   
-  }
-};
-const getPost = () => async (dispatch) => {
-  try {
-  
-    const response = await axios.get('https://node-compy.onrender.com/posts');
-
-    
+      }
+    );
 
     dispatch({
-      type: 'SET_POSTS',
-      payload: { posts: response.data.Posts}, 
+      type: "ADD_POST",
+      payload: { post: response.data.book },
     });
   } catch (error) {
-    console.error('Error adding post:', error);
-    
+    console.error("Error adding post:", error);
   }
 };
 
-
- 
-const editPostAction = (postId, updatedPost) => async (dispatch) => {
+const getPost = (queryData) => async (dispatch) => {
+  const { language, sort, category, limit, page } = queryData;
+  let old = "";
+  let latest = "";
+  if (category === "old") {
+    old = 1;
+  } else if (category === "latest") {
+    latest = 1;
+  }
   try {
-    
-    const response = await axios.put(`https://node-compy.onrender.com/posts/${postId}`, updatedPost);
+    const response = await axios.get(
+      `https://node-compy.onrender.com/books?page=${page}&limit=${limit}&language=${language}&sort=${sort}&old=${old}&latest=${latest}`
+    );
 
-   
+    
     dispatch({
-      type: 'EDIT_POST',
-      payload: { post: response.data },  
+      type: "SET_POSTS",
+      payload: { posts: response.data.books, totalPage:response.data.totalPage },
     });
   } catch (error) {
-    console.error('Error editing post:', error);
-    
+    console.error("Error adding post:", error);
   }
 };
 
- 
-const deletePostAction = (postId) => async (dispatch) => {
+const editPostAction = (postId, token, updatedPost) => async (dispatch) => {
   try {
-     
-    await axios.delete(`https://node-compy.onrender.com/posts/${postId}`);
+    const response = await axios.put(
+      `https://node-compy.onrender.com/books/update/${postId}`,
+      updatedPost,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
 
-    
     dispatch({
-      type: 'DELETE_POST',
+      type: "EDIT_POST",
+      payload: { post: response.data.book },
+    });
+  } catch (error) {
+    console.error("Error editing post:", error);
+  }
+};
+
+const deletePostAction = (postId, token) => async (dispatch) => {
+  try {
+    await axios.delete(
+      `https://node-compy.onrender.com/books/delete/${postId}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+
+    await getPost();
+
+    dispatch({
+      type: "DELETE_POST",
       payload: { postId },
     });
   } catch (error) {
-    console.error('Error deleting post:', error);
-   
+    console.error("Error deleting post:", error);
   }
 };
 
-export { addPostAction, getPost,editPostAction, deletePostAction,loginAction,registerAction ,logoutAction};
-
+export {
+  addBooks,
+  getPost,
+  editPostAction,
+  deletePostAction,
+  loginAction,
+  registerAction,
+  logoutAction,
+};

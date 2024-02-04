@@ -5,12 +5,13 @@ import logoutAction from '../../redux/actions';
 
 const Navbar = () => {
 
-    const {token}  = useSelector(store=> store);
+    const {token,role}  = useSelector(store=> store);
 const dispatch =  useDispatch();
+
   return (
     <nav className="bg-blue-500 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white text-lg font-semibold">Post app</div>
+        <div className="text-white text-lg font-semibold">Books app</div>
         
         {token ? (
           <div className="flex items-center space-x-4">
@@ -26,8 +27,10 @@ const dispatch =  useDispatch();
             </Link>
               
             </button>
-            
-            <Link to="/createpost" className="text-white hover:underline">Create Post</Link>
+            {
+              role ==="CREATOR"&& <Link to="/createpost" className="text-white hover:underline">Create Post</Link>
+            }
+           
             <Link to="/dashboard" className="text-white hover:underline">Dashboard</Link>
           </div>
         ) : (

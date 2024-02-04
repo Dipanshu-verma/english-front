@@ -41,7 +41,7 @@ const Auth = () => {
         await dispatch(loginAction(userData));
 
         alert("Login successful");
-        navigate("/dashbaord");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log(error);
@@ -49,6 +49,9 @@ const Auth = () => {
   };
   return (
     <div>
+   <h1 class="text-2xl font-bold mb-4 text-center text-gray-800">
+  For creating  <span class="text-blue-500">CREATOR</span>   account, you have to add "creator" before @ in your email while signup.
+</h1>
       <div className="w-[380px] m-auto rounded-2xl p-[1.5rem] text-center border mt-10">
         <h1 className="text-3xl font-bold mb-8">
           {signupForm ? "Singup Form" : "Login Form"}{" "}

@@ -10,16 +10,16 @@ import CreatePost from './Components/CreatePost';
 import { useSelector } from 'react-redux';
 function App() {
   const {token} = useSelector(store=>store)
+
   return (
     <div className="">
       <Navbar/>
     <Routes>
     <Route path='/' element={token?<Dashbaord/>:<Navigate to="login" />}  />
       <Route path='/dashboard' element={<Dashbaord/>}  />
-     
-      <Route path='/createpost' element={<CreatePost/>}  />
-      <Route path='/login' element={<Auth/>}  />
+      <Route path='/createpost' element={<CreatePost/>} />
 
+      <Route path='/login' element={<Auth/>}  />
 
     </Routes>
  
