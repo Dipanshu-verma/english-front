@@ -1,7 +1,7 @@
 import React, { useDebugValue } from "react";
 import { useState } from "react";
 import "./auth.css";
-import axios from "axios"
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginAction, registerAction } from "../../redux/actions";
 import { useNavigate } from "react-router-dom";
@@ -11,22 +11,19 @@ const Auth = () => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
-    
   });
-  const navigate=  useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
- 
+
   function onchangeUserData(e) {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   }
 
-  
   const handleForm = async (e) => {
     e.preventDefault();
 
     try {
       if (signupForm) {
-        
         await dispatch(registerAction(userData));
 
         alert("Signup successful");
@@ -34,10 +31,8 @@ const Auth = () => {
         setUserData({
           email: "",
           password: "",
-          
         });
       } else {
-       
         await dispatch(loginAction(userData));
 
         alert("Login successful");
@@ -49,9 +44,10 @@ const Auth = () => {
   };
   return (
     <div>
-   <h1 class="text-2xl font-bold mb-4 text-center text-gray-800">
-  For creating  <span class="text-blue-500">CREATOR</span>   account, you have to add "creator" before @ in your email while signup.
-</h1>
+      <h1 class="text-2xl font-bold mb-4 text-center text-gray-800">
+        For creating <span class="text-blue-500">CREATOR</span> account, you
+        have to add "creator" before @ in your email while signup.
+      </h1>
       <div className="w-[380px] m-auto rounded-2xl p-[1.5rem] text-center border mt-10">
         <h1 className="text-3xl font-bold mb-8">
           {signupForm ? "Singup Form" : "Login Form"}{" "}
@@ -75,7 +71,6 @@ const Auth = () => {
               setUserData({
                 email: "",
                 password: "",
-                
               });
             }}
           >
@@ -91,7 +86,6 @@ const Auth = () => {
               setUserData({
                 email: "",
                 password: "",
-               
               });
             }}
           >
@@ -141,7 +135,7 @@ const Auth = () => {
                   setShignupForm(true);
 
                   setUserData({
-                     email: "",
+                    email: "",
                     password: "",
                     confirmPassword: "",
                   });
@@ -178,7 +172,6 @@ const Auth = () => {
               className="w-full border rounded-xl px-3 py-2 mt-5 focus:bg-slate-100 text-black"
             />
 
-           
             <input
               type="submit"
               value="Signup"

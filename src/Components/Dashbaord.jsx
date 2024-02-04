@@ -26,16 +26,11 @@ const Dashboard = () => {
   const [postDetails, setPostDetails] = useState(null);
   const dispatch = useDispatch();
 
-
-
   useEffect(() => {
     dispatch(getPost(queryData));
   }, [dispatch, queryData]);
 
-
   const { userId, books, token, totalPage } = useSelector((state) => state);
-
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,41 +45,28 @@ const Dashboard = () => {
     }
   };
 
-
-
   const handleEditBook = (book) => {
     setPostDetails(book);
     setEditModalVisible(true);
   };
 
-
-
   const handleDeleteBook = (bookId) => {
     dispatch(deletePostAction(bookId, token));
   };
-
-
 
   const handlePagination = (newPage) => {
     setQueryData({ ...queryData, page: newPage });
   };
 
-
-
   const handleFilterChange = (e) => {
     setQueryData({ ...queryData, [e.target.name]: e.target.value });
   };
-
-
 
   const handlePrevPage = () => {
     if (queryData.page > 1) {
       handlePagination(queryData.page - 1);
     }
   };
-   
-   
-    
 
   const handleNextPage = () => {
     if (queryData.page < totalPage) {
@@ -92,13 +74,9 @@ const Dashboard = () => {
     }
   };
 
-
-
   const handleCloseModal = () => {
     setEditModalVisible(false);
   };
-
-
 
   const handleSaveChanges = () => {
     const { title, author, rating, language } = postDetails;
@@ -113,10 +91,7 @@ const Dashboard = () => {
     );
     setEditModalVisible(false);
   };
-            
-         
-           
-         
+
   return (
     <div className="container mx-auto mt-8">
       <h1 className="text-4xl font-bold mb-4 text-center">Book Dashboard</h1>
@@ -160,53 +135,56 @@ const Dashboard = () => {
 
       {books && books.length > 0 ? (
         <div className="px-10 overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300">
-    <thead className="bg-gray-800 text-white">
-      <tr>
-        <th className="py-3 px-4 border-b">Title</th>
-        <th className="py-3 px-4 border-b">Author</th>
-        <th className="py-3 px-4 border-b">Language</th>
-        <th className="py-3 px-4 border-b">Rating</th>
-        <th className="py-3 px-4 border-b">Date</th>
-        <th className="py-3 px-4 border-b">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {books.map((book) => (
-        <tr key={book._id} className="transition duration-300 ease-in-out hover:bg-gray-100">
-          <td className="py-3 px-4 border-b">{book.title}</td>
-          <td className="py-3 px-4 border-b">{book.author}</td>
-          <td className="py-3 px-4 border-b">{book.language}</td>
-          <td className="py-3 px-4 border-b">{book.rating}</td>
-          <td className="py-3 px-4 border-b">{new Date(book.createdAt).toLocaleString()}</td>
-          <td className="py-3 px-4 border-b space-x-2">
-            {book.userId === userId && (
-              <>
-                <button
-                  onClick={() => handleEditBook(book)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none"
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead className="bg-gray-800 text-white">
+              <tr>
+                <th className="py-3 px-4 border-b">Title</th>
+                <th className="py-3 px-4 border-b">Author</th>
+                <th className="py-3 px-4 border-b">Language</th>
+                <th className="py-3 px-4 border-b">Rating</th>
+                <th className="py-3 px-4 border-b">Date</th>
+                <th className="py-3 px-4 border-b">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.map((book) => (
+                <tr
+                  key={book._id}
+                  className="transition duration-300 ease-in-out hover:bg-gray-100"
                 >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteBook(book._id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none"
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+                  <td className="py-3 px-4 border-b">{book.title}</td>
+                  <td className="py-3 px-4 border-b">{book.author}</td>
+                  <td className="py-3 px-4 border-b">{book.language}</td>
+                  <td className="py-3 px-4 border-b">{book.rating}</td>
+                  <td className="py-3 px-4 border-b">
+                    {new Date(book.createdAt).toLocaleString()}
+                  </td>
+                  <td className="py-3 px-4 border-b space-x-2">
+                    {book.userId === userId && (
+                      <>
+                        <button
+                          onClick={() => handleEditBook(book)}
+                          className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBook(book._id)}
+                          className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p className="text-gray-500">No books available.</p>
       )}
-
 
       {/* Edit Modal */}
       {editModalVisible && postDetails && (
