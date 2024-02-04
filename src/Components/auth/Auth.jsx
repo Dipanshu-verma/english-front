@@ -27,11 +27,12 @@ const Auth = () => {
         await dispatch(registerAction(userData));
 
         alert("Signup successful");
-        setShignupForm(false);
         setUserData({
           email: "",
           password: "",
         });
+        setShignupForm(false);
+       
       } else {
         await dispatch(loginAction(userData));
 
