@@ -81,7 +81,9 @@ const CreatePost = () => {
             onChange={handleInputChange}
             value={postDetails.language}
             className="border p-2 rounded-md w-full"
+            required
           >
+          <option value="">Select language</option>
             {languageOptions.map((language, index) => (
               <option key={index} value={language}>
                 {language}
@@ -100,6 +102,7 @@ const CreatePost = () => {
             onChange={handleInputChange}
             required
           >
+            <option value="">Select Rating</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
