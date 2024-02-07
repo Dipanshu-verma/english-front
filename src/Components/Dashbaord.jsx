@@ -25,12 +25,13 @@ const Dashboard = () => {
 
   const [postDetails, setPostDetails] = useState(null);
   const dispatch = useDispatch();
-
+  const { userId, books, token, totalPage } = useSelector((state) => state);
+  
   useEffect(() => {
-    dispatch(getPost(queryData));
+    dispatch(getPost(queryData,token));
   }, [dispatch, queryData]);
 
-  const { userId, books, token, totalPage } = useSelector((state) => state);
+ 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
