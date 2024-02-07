@@ -28,6 +28,7 @@ const Dashboard = () => {
   const { userId, books, token, totalPage } = useSelector((state) => state);
   
   useEffect(() => {
+    
     dispatch(getPost(queryData,token));
   }, [dispatch, queryData]);
 
@@ -60,7 +61,7 @@ const Dashboard = () => {
   };
 
   const handleFilterChange = (e) => {
-    setQueryData({ ...queryData, [e.target.name]: e.target.value });
+    setQueryData({ ...queryData, [e.target.name]: e.target.value,page:1 });
   };
 
   const handlePrevPage = () => {
