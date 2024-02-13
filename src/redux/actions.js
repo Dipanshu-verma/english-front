@@ -80,7 +80,7 @@ const getPost = (queryData,token) => async (dispatch) => {
   }
   try {
     const response = await axios.get(
-      `https://node-compy.onrender.com/books?page=${page}&limit=${limit}&language=${language}&sort=${sort}&old=${old}&latest=${latest}&book=${book},search=${search}`,
+      `https://node-compy.onrender.com/books?page=${page}&limit=${limit}&language=${language}&sort=${sort}&old=${old}&latest=${latest}&book=${book}&search=${search}`,
       {
         headers: {
           Authorization: `${token}`,
