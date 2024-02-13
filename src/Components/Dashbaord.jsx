@@ -26,13 +26,10 @@ const Dashboard = () => {
   const [postDetails, setPostDetails] = useState(null);
   const dispatch = useDispatch();
   const { userId, books, token, totalPage } = useSelector((state) => state);
-  
-  useEffect(() => {
-    
-    dispatch(getPost(queryData,token));
-  }, [dispatch, queryData]);
 
- 
+  useEffect(() => {
+    dispatch(getPost(queryData, token));
+  }, [dispatch, queryData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,7 +58,7 @@ const Dashboard = () => {
   };
 
   const handleFilterChange = (e) => {
-    setQueryData({ ...queryData, [e.target.name]: e.target.value,page:1 });
+    setQueryData({ ...queryData, [e.target.name]: e.target.value, page: 1 });
   };
 
   const handlePrevPage = () => {
@@ -94,6 +91,12 @@ const Dashboard = () => {
     setEditModalVisible(false);
   };
 
+  function handleMybook(e) {
+    const { name, value } = e.target;
+    setQueryData({ ...queryData, page: 1, [name]: value });
+  }
+
+  console.log(queryData);
   return (
     <div className="container mx-auto mt-8">
       <h1 className="text-4xl font-bold mb-4 text-center">Book Dashboard</h1>
@@ -132,6 +135,17 @@ const Dashboard = () => {
           <option value="">Select By Date</option>
           <option value="old">Old One</option>
           <option value="latest">New One</option>
+        </select>
+
+        <select
+          name="book"
+          value={queryData.book}
+          onChange={handleMybook}
+          className="border p-2 rounded-md"
+        >
+          <option value="">Select Book</option>
+          <option value="mybook">My Books</option>
+          <option value="all">All Books</option>
         </select>
       </div>
 

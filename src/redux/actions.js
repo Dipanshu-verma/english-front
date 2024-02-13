@@ -70,7 +70,7 @@ const addBooks = (post, token) => async (dispatch) => {
 };
 
 const getPost = (queryData,token) => async (dispatch) => {
-  const { language, sort, category, limit, page } = queryData;
+  const { language, sort, category, limit, page,book,search } = queryData;
   let old = "";
   let latest = "";
   if (category === "old") {
@@ -80,7 +80,7 @@ const getPost = (queryData,token) => async (dispatch) => {
   }
   try {
     const response = await axios.get(
-      `https://node-compy.onrender.com/books?page=${page}&limit=${limit}&language=${language}&sort=${sort}&old=${old}&latest=${latest}`,
+      `https://node-compy.onrender.com/books?page=${page}&limit=${limit}&language=${language}&sort=${sort}&old=${old}&latest=${latest}&book=${book},search=${search}`,
       {
         headers: {
           Authorization: `${token}`,
