@@ -20,6 +20,8 @@ const Dashboard = () => {
     category: "",
     page: 1,
     limit: 5,
+    search:"",
+    book:"",
   });
   const [editModalVisible, setEditModalVisible] = useState(false);
 
