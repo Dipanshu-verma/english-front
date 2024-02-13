@@ -20,8 +20,8 @@ const Dashboard = () => {
     category: "",
     page: 1,
     limit: 5,
-    search:"",
-    book:"",
+    search: "",
+    book: "",
   });
   const [editModalVisible, setEditModalVisible] = useState(false);
 
@@ -97,12 +97,25 @@ const Dashboard = () => {
     const { name, value } = e.target;
     setQueryData({ ...queryData, page: 1, [name]: value });
   }
+  function handlesearchBook(e) {
+    const { name, value } = e.target;
+    setQueryData({ ...queryData, page: 1, [name]: value });
+  }
 
-  console.log(queryData);
+ 
   return (
     <div className="container mx-auto mt-8">
       <h1 className="text-4xl font-bold mb-4 text-center">Book Dashboard</h1>
       <div className="mb-4 flex space-x-4 pl-10">
+        <input
+          type="text"
+          placeholder="Search book here"
+          value={queryData.search}
+          name="search"
+          onChange={handlesearchBook}
+          className="border p-2 rounded-md"
+        />
+
         <select
           name="language"
           onChange={handleFilterChange}
